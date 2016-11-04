@@ -1,3 +1,3 @@
-# SQL Chinook Exercise
+c# SQL Chinook Exercise
 
-The following repository contains SQL queries from the exercise found [here](https://github.com/nashville-software-school/csharp-dotnet-milestones/blob/master/3-database-driven-applications/exercises/database/DBS_SQL_LEARNING-THRU-DOING.md)
+The following index.cs file contains SQL queries from the exercise found [here](https://github.com/nashville-software-school/csharp-dotnet-milestones/blob/master/3-database-driven-applications/exercises/database/DBS_SQL_LEARNING-THRU-DOING.md)
