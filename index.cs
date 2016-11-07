@@ -60,14 +60,7 @@ Select InvoiceDate
 from Invoice
 Where InvoiceDate LIKE "2009%"
 or InvoiceDate LIKE "2011%"
-//9.** What are the respective total sales for each of those years?
-Select Sum(Total) as "Total Purchases in 2009"
-from Invoice
-Where(InvoiceDate between "2009-01-01 00:00:00" and "2009-12-31 00:00:00")
-Select Sum(Total) as "Total Purchases in 2011"
-from Invoice
-Where(InvoiceDate between "20011-01-01 00:00:00" and "20011-12-31 00:00:00")
-
+//9. What are the respective total sales for each of those years?
 select (
 select Count(*) from Invoice where InvoiceDate like "2009%" ) as TotalInvoicesIn2009, 
 (select Count(*) from Invoice where InvoiceDate like "2011%")  as TotalInvoicesIn2011 
@@ -142,9 +135,20 @@ on SupportRepId = EmployeeId
 join Invoice I
 on C.CustomerId = I.CustomerId
 group by E.FirstName, E.LastName
-//19.*** Which sales agent made the most in sales in 2009
-
-//20.*** Which sales agent made the most in sales over all?
+//19. Which sales agent made the most in sales in 2009
+select E.FirstName, 
+    E.LastName,
+	SUM(Total) as "Number of Sales"
+from Employee E
+join Customer C
+on SupportRepId = EmployeeId
+join Invoice I
+on I.CustomerId = C.CustomerId
+where InvoiceDate like "2009%"
+group by E.FirstName, E.LastName
+order by "Number of Sales" desc
+limit 1
+//20. Which sales agent made the most in sales over all?
 Select E.FirstName as "Employee First Name",
 E.LastName as "Employee Last Name",
 Sum(Total) as "Invoice Total"
@@ -170,9 +174,58 @@ join Customer C
 on C.CustomerId = I.CustomerId
 group by Country
 //23. Which country's customers spent the most?
-
+select Country, 
+	SUM(Total) as "Number of Sales"
+from Customer C
+join Invoice I
+on C.CustomerId = I.CustomerId
+group by Country
+order by "Number of Sales" desc
+limit 1
 //24. Provide a query that shows the most purchased track of 2013.
+select T.Name, 
+	COUNT(InvoiceLineId) as "Number of Sales"
+from Track T
+join InvoiceLine IL
+on IL.TrackId = T.TrackId
+join Invoice I
+on I.InvoiceId = IL.InvoiceId
+where InvoiceDate like "2013%"
+group by T.Name
+order by "Number of Sales" desc
+limit 1
 //25. Provide a query that shows the top 5 most purchased tracks over all.
+select T.Name, 
+	COUNT(InvoiceLineId) as "Number of Sales"
+from Track T
+join InvoiceLine IL
+on IL.TrackId = T.TrackId
+join Invoice I
+on I.InvoiceId = IL.InvoiceId
+group by T.Name
+order by "Number of Sales" desc
+limit 5
 //26. Provide a query that shows the top 3 best selling artists.
+select A.Name, 
+	COUNT(InvoiceLineId) as "Number of Sales"
+from Artist A
+join Album AL
+on AL.ArtistId = A.ArtistId
+join Track T
+on T.AlbumId = AL.AlbumId
+join InvoiceLine IL
+on IL.TrackId = T.TrackId
+group by A.Name
+order by "Number of Sales" desc
+limit 3
 //27. Provide a query that shows the most purchased Media Type.
-
+select M.Name, 
+	COUNT(InvoiceLineId) as "Number of Sales"
+from MediaType M
+join Track T
+on T.MediaTypeId = M.MediaTypeId
+join InvoiceLine IL
+on IL.TrackId = T.TrackId
+group by M.Name
+order by "Number of Sales" desc
+limit 1
